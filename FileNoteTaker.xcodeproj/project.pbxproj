@@ -9,21 +9,39 @@
 /* Begin PBXBuildFile section */
 		2146E29425326DCB00C7D8D5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E29325326DCB00C7D8D5 /* AppDelegate.swift */; };
 		2146E29625326DCB00C7D8D5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E29525326DCB00C7D8D5 /* SceneDelegate.swift */; };
-		2146E29825326DCB00C7D8D5 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E29725326DCB00C7D8D5 /* ViewController.swift */; };
+		2146E29825326DCB00C7D8D5 /* NotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E29725326DCB00C7D8D5 /* NotesViewController.swift */; };
 		2146E29B25326DCB00C7D8D5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2146E29925326DCB00C7D8D5 /* Main.storyboard */; };
 		2146E29D25326DCD00C7D8D5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2146E29C25326DCD00C7D8D5 /* Assets.xcassets */; };
 		2146E2A025326DCD00C7D8D5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2146E29E25326DCD00C7D8D5 /* LaunchScreen.storyboard */; };
+		2146E2B0253270B000C7D8D5 /* EditNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E2AF253270B000C7D8D5 /* EditNoteViewController.swift */; };
+		2146E2B3253270BA00C7D8D5 /* DeletedNotesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E2B2253270BA00C7D8D5 /* DeletedNotesViewController.swift */; };
+		2146E2B6253270CA00C7D8D5 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E2B5253270C900C7D8D5 /* NoteTableViewCell.swift */; };
+		2146E2B9253270E100C7D8D5 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2B8253270E100C7D8D5 /* NoteTableViewCell.xib */; };
+		2146E2CB2532734B00C7D8D5 /* Note.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2CA2532734B00C7D8D5 /* Note.plist */; };
+		2146E2CE2532736A00C7D8D5 /* Note.txt in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2CD2532736A00C7D8D5 /* Note.txt */; };
+		2146E2D22532737C00C7D8D5 /* Note.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2D12532737C00C7D8D5 /* Note.xml */; };
+		2146E2D62532738A00C7D8D5 /* Note.json in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2D52532738A00C7D8D5 /* Note.json */; };
+		2146E2DA253274C600C7D8D5 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E2D9253274C600C7D8D5 /* Note.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2146E29025326DCB00C7D8D5 /* FileNoteTaker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileNoteTaker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2146E29325326DCB00C7D8D5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2146E29525326DCB00C7D8D5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		2146E29725326DCB00C7D8D5 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		2146E29725326DCB00C7D8D5 /* NotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesViewController.swift; sourceTree = "<group>"; };
 		2146E29A25326DCB00C7D8D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2146E29C25326DCD00C7D8D5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2146E29F25326DCD00C7D8D5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2146E2A125326DCD00C7D8D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2146E2AF253270B000C7D8D5 /* EditNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNoteViewController.swift; sourceTree = "<group>"; };
+		2146E2B2253270BA00C7D8D5 /* DeletedNotesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeletedNotesViewController.swift; sourceTree = "<group>"; };
+		2146E2B5253270C900C7D8D5 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
+		2146E2B8253270E100C7D8D5 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
+		2146E2CA2532734B00C7D8D5 /* Note.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Note.plist; sourceTree = "<group>"; };
+		2146E2CD2532736A00C7D8D5 /* Note.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Note.txt; sourceTree = "<group>"; };
+		2146E2D12532737C00C7D8D5 /* Note.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Note.xml; sourceTree = "<group>"; };
+		2146E2D52532738A00C7D8D5 /* Note.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Note.json; sourceTree = "<group>"; };
+		2146E2D9253274C600C7D8D5 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +74,128 @@
 		2146E29225326DCB00C7D8D5 /* FileNoteTaker */ = {
 			isa = PBXGroup;
 			children = (
-				2146E29325326DCB00C7D8D5 /* AppDelegate.swift */,
-				2146E29525326DCB00C7D8D5 /* SceneDelegate.swift */,
-				2146E29725326DCB00C7D8D5 /* ViewController.swift */,
+				2146E2A825326DF900C7D8D5 /* Support */,
+				2146E2C42532718E00C7D8D5 /* Resources */,
+				2146E2BB2532712600C7D8D5 /* NotesListScreen */,
+				2146E2BF2532715700C7D8D5 /* EditScreen */,
+				2146E2C12532716500C7D8D5 /* DeleteScreen */,
 				2146E29925326DCB00C7D8D5 /* Main.storyboard */,
-				2146E29C25326DCD00C7D8D5 /* Assets.xcassets */,
-				2146E29E25326DCD00C7D8D5 /* LaunchScreen.storyboard */,
-				2146E2A125326DCD00C7D8D5 /* Info.plist */,
 			);
 			path = FileNoteTaker;
+			sourceTree = "<group>";
+		};
+		2146E2A825326DF900C7D8D5 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2A125326DCD00C7D8D5 /* Info.plist */,
+				2146E29E25326DCD00C7D8D5 /* LaunchScreen.storyboard */,
+				2146E29C25326DCD00C7D8D5 /* Assets.xcassets */,
+				2146E29325326DCB00C7D8D5 /* AppDelegate.swift */,
+				2146E29525326DCB00C7D8D5 /* SceneDelegate.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		2146E2AB25326E4600C7D8D5 /* Files */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2CA2532734B00C7D8D5 /* Note.plist */,
+				2146E2CD2532736A00C7D8D5 /* Note.txt */,
+				2146E2D12532737C00C7D8D5 /* Note.xml */,
+				2146E2D52532738A00C7D8D5 /* Note.json */,
+			);
+			path = Files;
+			sourceTree = "<group>";
+		};
+		2146E2AC25326E4C00C7D8D5 /* Delete */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Delete;
+			sourceTree = "<group>";
+		};
+		2146E2BB2532712600C7D8D5 /* NotesListScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2D8253274BD00C7D8D5 /* Model */,
+				2146E2BC2532713A00C7D8D5 /* View */,
+				2146E2BE2532714F00C7D8D5 /* Controllers */,
+			);
+			path = "\U0010NotesListScreen";
+			sourceTree = "<group>";
+		};
+		2146E2BC2532713A00C7D8D5 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2BD2532714300C7D8D5 /* TableViewCell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		2146E2BD2532714300C7D8D5 /* TableViewCell */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2B8253270E100C7D8D5 /* NoteTableViewCell.xib */,
+				2146E2B5253270C900C7D8D5 /* NoteTableViewCell.swift */,
+			);
+			path = TableViewCell;
+			sourceTree = "<group>";
+		};
+		2146E2BE2532714F00C7D8D5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2146E29725326DCB00C7D8D5 /* NotesViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		2146E2BF2532715700C7D8D5 /* EditScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2C02532715D00C7D8D5 /* Controllers */,
+			);
+			path = EditScreen;
+			sourceTree = "<group>";
+		};
+		2146E2C02532715D00C7D8D5 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2AF253270B000C7D8D5 /* EditNoteViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		2146E2C12532716500C7D8D5 /* DeleteScreen */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2C22532717000C7D8D5 /* ViewControllers */,
+			);
+			path = DeleteScreen;
+			sourceTree = "<group>";
+		};
+		2146E2C22532717000C7D8D5 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2B2253270BA00C7D8D5 /* DeletedNotesViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		2146E2C42532718E00C7D8D5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2AB25326E4600C7D8D5 /* Files */,
+				2146E2AC25326E4C00C7D8D5 /* Delete */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2146E2D8253274BD00C7D8D5 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2146E2D9253274C600C7D8D5 /* Note.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -124,9 +255,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2146E2CE2532736A00C7D8D5 /* Note.txt in Resources */,
 				2146E2A025326DCD00C7D8D5 /* LaunchScreen.storyboard in Resources */,
+				2146E2D62532738A00C7D8D5 /* Note.json in Resources */,
+				2146E2D22532737C00C7D8D5 /* Note.xml in Resources */,
+				2146E2CB2532734B00C7D8D5 /* Note.plist in Resources */,
 				2146E29D25326DCD00C7D8D5 /* Assets.xcassets in Resources */,
 				2146E29B25326DCB00C7D8D5 /* Main.storyboard in Resources */,
+				2146E2B9253270E100C7D8D5 /* NoteTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,9 +273,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2146E29825326DCB00C7D8D5 /* ViewController.swift in Sources */,
+				2146E2B3253270BA00C7D8D5 /* DeletedNotesViewController.swift in Sources */,
+				2146E29825326DCB00C7D8D5 /* NotesViewController.swift in Sources */,
+				2146E2DA253274C600C7D8D5 /* Note.swift in Sources */,
 				2146E29425326DCB00C7D8D5 /* AppDelegate.swift in Sources */,
+				2146E2B0253270B000C7D8D5 /* EditNoteViewController.swift in Sources */,
 				2146E29625326DCB00C7D8D5 /* SceneDelegate.swift in Sources */,
+				2146E2B6253270CA00C7D8D5 /* NoteTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +428,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 69P6K7C2T4;
-				INFOPLIST_FILE = FileNoteTaker/Info.plist;
+				INFOPLIST_FILE = FileNoteTaker/Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -307,7 +447,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 69P6K7C2T4;
-				INFOPLIST_FILE = FileNoteTaker/Info.plist;
+				INFOPLIST_FILE = FileNoteTaker/Support/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

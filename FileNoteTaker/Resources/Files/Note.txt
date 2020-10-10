@@ -1,0 +1,7 @@
+Groceries
+- oranges
+- bread
+- eggs
+- cheese
+- bacon
+- cereal
