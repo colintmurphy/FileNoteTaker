@@ -43,20 +43,18 @@ class EditNoteViewController: UIViewController {
     @IBAction func saveChanges(_ sender: Any) {
         
         guard let note = self.note,
-              let text = self.textField.text else { return }
+              let title = self.textField.text else { return }
         
-        // MARK: - Write to file
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let url = paths[0].appendingPathComponent("message2.txt")
+        let strData = "\(title)\n\(self.textView.text ?? "")"
         
-        let file = note.path
-        let fileContents = text + "\n" + self.textView.text
-        if let dir = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-            
-            let fileURL = dir.appendingPathComponent(file)
-            do {
-                try fileContents.write(to: fileURL, atomically: false, encoding: .utf8)
-            } catch {
-                print(error)
-            }
+        do {
+            try strData.write(to: url, atomically: true, encoding: .utf8)
+            let data = try String(contentsOf: url, encoding: .utf8)
+            print(data.description)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

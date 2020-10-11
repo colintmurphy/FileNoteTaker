@@ -45,48 +45,65 @@ class NotesViewController: UIViewController {
     @IBAction func createNewNote(_ sender: Any) {
         
         // MARK: - CREATE
+
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let url = paths[0].appendingPathComponent("message3.txt")
+        let str = "Test Message 3"
         
-        let path = "Resources/NewFile.txt"
-        FileManager.default.createFile(atPath: path, contents: nil, attributes: nil)
+        do {
+            try str.write(to: url, atomically: true, encoding: .utf8)
+            let data = try String(contentsOf: url, encoding: .utf8)
+            self.parseTextFileResults(of: data)
+            self.tableView.reloadData()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     private func deleteNote(at note: Note) -> Bool {
         
+        // MARK: - DELETE
+        
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        let url = paths[0].appendingPathComponent("message2.txt")
+        print(paths[0])
+        
+        /*
+        do {
+            try FileManager.default.removeItem(at: url)
+            return true
+        } catch {
+            print(error)
+            return false
+        }*/
+        
         // MARK: - MOVE
         
-        guard let filePath = URL(string: "Resources/Note.\(note.type.rawValue)"),
-              let newPath = URL(string: "Delete/Note.\(note.type.rawValue)") else { return false }
+        let dataPath = paths[0].appendingPathComponent("SoonToDeleteFolder")
+        if !FileManager.default.fileExists(atPath: dataPath.absoluteString) {
+            do {
+                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
+            } catch {
+                print(error.localizedDescription);
+            }
+        }
+        
         do {
-            try FileManager.default.moveItem(at: filePath, to: newPath)
+            try FileManager.default.moveItem(at: url, to: dataPath.appendingPathComponent("message2.txt"))
             return true
         } catch {
             print(error)
             return false
         }
         
-        // MARK: - DELETE
-        
         /*
-        let filePath = "Resources/Note.\(note.type.rawValue)"
         do {
-            try FileManager.default.removeItem(atPath: filePath)
+            try FileManager.default.copyItem(at: <#T##URL#>, to: <#T##URL#>)
+            return true
         } catch {
             print(error)
+            return false
         }*/
-    }
-    
-    // MARK: - Setup
-    
-    private func setup() {
-        
-        self.loadDataFromPlist()
-        self.loadDataFromTextFile()
-        self.loadDataFromJSONFile()
-        self.loadDataFromXMLFile(withName: "Note")
-        
-        self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
-        self.tableView.tableFooterView = UIView()
-        self.tableView.reloadData()
     }
     
     // MARK: - Handle .plist File
@@ -159,6 +176,25 @@ class NotesViewController: UIViewController {
             let details: String = tempArr[1...].joined(separator: "\n")
             let newNote = Note(title: title, details: details, type: .txt, path: "Resources/Note.txt")
             self.notes.append(newNote)
+        } else if tempArr.count == 1 {
+            let title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            let newNote = Note(title: title, details: "", type: .txt, path: "Resources/Note.txt")
+            self.notes.append(newNote)
+        }
+    }
+    
+    private func readDocsFromDirectory() {
+        
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        do {
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+            for url in fileURLs {
+                let data = try String(contentsOf: url, encoding: .utf8)
+                self.parseTextFileResults(of: data)
+            }
+        } catch {
+            print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
         }
     }
     
@@ -171,6 +207,21 @@ class NotesViewController: UIViewController {
             parser.delegate = self
             parser.parse()
         }
+    }
+    
+    // MARK: - Setup
+    
+    private func setup() {
+        
+        self.loadDataFromPlist()
+        self.loadDataFromTextFile()
+        self.loadDataFromJSONFile()
+        self.loadDataFromXMLFile(withName: "Note")
+        readDocsFromDirectory()
+        
+        self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
+        self.tableView.tableFooterView = UIView()
+        self.tableView.reloadData()
     }
 }
 
@@ -242,8 +293,13 @@ extension NotesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
         let deleteAction = UIContextualAction(style: .destructive, title: "Delete", handler: { (action, view, closure) in
-            self.notes.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            
+            if self.deleteNote(at: self.notes[indexPath.row]) {
+                self.notes.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+            } else {
+                print("didn't move file")
+            }
         })
         
         let swipe = UISwipeActionsConfiguration(actions: [deleteAction])
