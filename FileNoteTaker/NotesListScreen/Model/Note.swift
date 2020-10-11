@@ -20,11 +20,13 @@ struct Note: Decodable {
     var title: String
     var details: String
     var type: FileType
+    var path: String
     
     enum CodingKeys: String, CodingKey {
         
         case title
         case details
         case type
+        case path
     }
 }

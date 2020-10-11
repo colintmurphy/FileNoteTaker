@@ -8,5 +8,7 @@
 	<string>- Need to mail postcard before this Sunday</string>
 	<key>type</key>
 	<string>plist</string>
+	<key>path</key>
+	<string>Resources/Note.json</string>
 </dict>
 </plist>

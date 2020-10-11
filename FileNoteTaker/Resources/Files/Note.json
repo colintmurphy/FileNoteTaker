@@ -1,5 +1,6 @@
 {
     "title": "Friday",
     "details": "Family dinner at 6:30pm",
-    "type": "json"
+    "type": "json",
+    "path": "Resources/Note.json"
 }

@@ -25,14 +25,7 @@ class NotesViewController: UIViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        self.loadDataFromPlist()
-        self.loadDataFromTextFile()
-        self.loadDataFromJSONFile()
-        self.loadDataFromXMLFile(withName: "Note")
-        
-        self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
-        self.tableView.tableFooterView = UIView()
-        self.tableView.reloadData()
+        self.setup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -41,10 +34,59 @@ class NotesViewController: UIViewController {
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     // MARK: - IBActions
     
     @IBAction func createNewNote(_ sender: Any) {
         
+        // MARK: - CREATE
+        
+        let path = "Resources/NewFile.txt"
+        FileManager.default.createFile(atPath: path, contents: nil, attributes: nil)
+    }
+    
+    private func deleteNote(at note: Note) -> Bool {
+        
+        // MARK: - MOVE
+        
+        guard let filePath = URL(string: "Resources/Note.\(note.type.rawValue)"),
+              let newPath = URL(string: "Delete/Note.\(note.type.rawValue)") else { return false }
+        do {
+            try FileManager.default.moveItem(at: filePath, to: newPath)
+            return true
+        } catch {
+            print(error)
+            return false
+        }
+        
+        // MARK: - DELETE
+        
+        /*
+        let filePath = "Resources/Note.\(note.type.rawValue)"
+        do {
+            try FileManager.default.removeItem(atPath: filePath)
+        } catch {
+            print(error)
+        }*/
+    }
+    
+    // MARK: - Setup
+    
+    private func setup() {
+        
+        self.loadDataFromPlist()
+        self.loadDataFromTextFile()
+        self.loadDataFromJSONFile()
+        self.loadDataFromXMLFile(withName: "Note")
+        
+        self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
+        self.tableView.tableFooterView = UIView()
+        self.tableView.reloadData()
     }
     
     // MARK: - Handle .plist File
@@ -115,7 +157,7 @@ class NotesViewController: UIViewController {
         if tempArr.count > 1 {
             let title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             let details: String = tempArr[1...].joined(separator: "\n")
-            let newNote = Note(title: title, details: details, type: .txt)
+            let newNote = Note(title: title, details: details, type: .txt, path: "Resources/Note.txt")
             self.notes.append(newNote)
         }
     }
@@ -148,7 +190,7 @@ extension NotesViewController: XMLParserDelegate {
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         
         if elementName == "note" {
-            let newNote = Note(title: self.xmlTitle, details: self.xmlDetails, type: .xml)
+            let newNote = Note(title: self.xmlTitle, details: self.xmlDetails, type: .xml, path: "Resources/Note.xml")
             self.notes.append(newNote)
         }
     }
@@ -195,5 +237,17 @@ extension NotesViewController: UITableViewDataSource {
         cell.set(title: self.notes[indexPath.row].title, details: self.notes[indexPath.row].details)
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete", handler: { (action, view, closure) in
+            self.notes.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        })
+        
+        let swipe = UISwipeActionsConfiguration(actions: [deleteAction])
+        swipe.performsFirstActionWithFullSwipe = false
+        return swipe
     }
 }
