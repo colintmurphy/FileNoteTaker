@@ -121,18 +121,18 @@ class MyFileManager {
     
     // MARK: - Copy
     
-    func copyFile(note: Note){
+    func copyFile(note: Note) {
         
-        guard let oldPath = Bundle.main.path(forResource: "Note", ofType: note.type.rawValue),
-              let oldUrl = URL(string: oldPath) else { return }
-        
-        do {
-            let newPath = paths[0].appendingPathComponent(note.path.fileName())
-            try fm.copyItem(at: oldUrl, to: newPath)
-            // doing a copy, but cannot copy being xml, json, plist files are used here
-            // just for demonstration purpose
-        } catch {
-            print(error)
+        if note.type == .txt {
+            guard let oldPath = Bundle.main.path(forResource: "Note", ofType: note.type.rawValue) else { return }
+            let oldUrl = URL(fileURLWithPath: oldPath)
+            
+            do {
+                let newPath = paths[0].appendingPathComponent(note.path.fileName())
+                try fm.copyItem(at: oldUrl, to: newPath)
+            } catch {
+                print(error)
+            }
         }
     }
 }

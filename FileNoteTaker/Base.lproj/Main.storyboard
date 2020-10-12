@@ -24,6 +24,12 @@
                                     <outlet property="delegate" destination="6dU-e7-0qE" id="Tou-8Z-2cX"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Files to Delete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="20C-Fu-z3I">
+                                <rect key="frame" x="140" y="437.5" width="134.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="wtt-hM-kd0"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -32,6 +38,8 @@
                             <constraint firstItem="lb2-it-nYu" firstAttribute="leading" secondItem="wtt-hM-kd0" secondAttribute="leading" id="Eia-02-lhL"/>
                             <constraint firstItem="wtt-hM-kd0" firstAttribute="bottom" secondItem="lb2-it-nYu" secondAttribute="bottom" id="b45-Nf-STW"/>
                             <constraint firstItem="lb2-it-nYu" firstAttribute="top" secondItem="wtt-hM-kd0" secondAttribute="top" id="pHT-IR-UfX"/>
+                            <constraint firstItem="20C-Fu-z3I" firstAttribute="centerY" secondItem="UEb-tF-JlG" secondAttribute="centerY" id="tdf-M1-CmX"/>
+                            <constraint firstItem="20C-Fu-z3I" firstAttribute="centerX" secondItem="UEb-tF-JlG" secondAttribute="centerX" id="vhD-9g-Zcs"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Recently Deleted" id="MqD-F7-YPO">
@@ -42,6 +50,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="emptyListLabel" destination="20C-Fu-z3I" id="Gw5-kJ-5Wg"/>
                         <outlet property="tableView" destination="lb2-it-nYu" id="TW2-g1-tLm"/>
                     </connections>
                 </viewController>
@@ -58,20 +67,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="PAE-vO-Zs9">
-                                <rect key="frame" x="0.0" y="140" width="414" height="722"/>
+                                <rect key="frame" x="0.0" y="140" width="414" height="756"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="ttv-F5-ZMf"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="OyQ-cz-MoO"/>
                                 </connections>
                             </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Notes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GAo-H4-wCn">
+                                <rect key="frame" x="171.5" y="437.5" width="71.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="GAo-H4-wCn" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="2h6-Z6-pIb"/>
                             <constraint firstItem="PAE-vO-Zs9" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="5at-xf-F6a"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="PAE-vO-Zs9" secondAttribute="bottom" id="NCh-KR-YMV"/>
+                            <constraint firstAttribute="bottom" secondItem="PAE-vO-Zs9" secondAttribute="bottom" id="NCh-KR-YMV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="PAE-vO-Zs9" secondAttribute="trailing" id="bvl-Il-o2e"/>
+                            <constraint firstItem="GAo-H4-wCn" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="hhm-Zd-I38"/>
                             <constraint firstItem="PAE-vO-Zs9" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="p9d-RM-yKV"/>
                         </constraints>
                     </view>
@@ -88,6 +105,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="emptyListLabel" destination="GAo-H4-wCn" id="Hsa-Nx-cFy"/>
                         <outlet property="tableView" destination="PAE-vO-Zs9" id="8Ym-8E-1cg"/>
                     </connections>
                 </viewController>

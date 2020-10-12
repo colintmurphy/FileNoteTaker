@@ -12,10 +12,15 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     // MARK: - IBOutlets
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var emptyListLabel: UILabel!
     
     // MARK: - Variables
     
-    private var notes: [Note] = []
+    private var notes: [Note] = [] {
+        didSet {
+            self.emptyListLabel.isHidden = !self.notes.isEmpty
+        }
+    }
     private var xmlNote: Note?
     private var xmlElement: String = ""
     private var xmlTitle: String = ""
@@ -47,6 +52,7 @@ class NotesViewController: UIViewController, FileReaderProtocol {
 
         if let newFile = MyFileManager.shared.createFile(),
            let note = self.parseTextFileResults(of: newFile.data, with: newFile.path) {
+            
             self.notes.append(note)
             self.tableView.reloadData()
         }
@@ -78,9 +84,8 @@ class NotesViewController: UIViewController, FileReaderProtocol {
         if doInitialLoad {
             
             if let txtBundlePath = Bundle.main.path(forResource: "Note", ofType: "txt"),
-               let note = self.loadDataFromTextFile(with: txtBundlePath) {
-                
-                self.notes.append(note)
+                let note = self.loadDataFromTextFile(with: txtBundlePath) {
+                MyFileManager.shared.copyFile(note: note)
             }
             self.loadDataFromPlist()
             self.loadDataFromJSONFile()
@@ -95,7 +100,6 @@ class NotesViewController: UIViewController, FileReaderProtocol {
         guard let note: Note = self.getPlistFile(withName: "Note") else { return }
         MyFileManager.shared.copyFile(note: note)
         MyFileManager.shared.createNewNote(with: note)
-        self.notes.append(note)
     }
     
     private func getPlistFile<T: Decodable>(withName name: String) -> T? {
@@ -116,10 +120,8 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     private func loadDataFromJSONFile() {
         
         guard let note: Note = self.getJSONFile(withName: "Note") else { return }
-        #warning("this is where I should copy THIS NOT WORKING")
         MyFileManager.shared.copyFile(note: note)
         MyFileManager.shared.createNewNote(with: note)
-        self.notes.append(note)
     }
     
     private func getJSONFile<T: Decodable>(withName name: String) -> T? {
@@ -141,9 +143,9 @@ class NotesViewController: UIViewController, FileReaderProtocol {
         
         guard let path = Bundle.main.path(forResource: name, ofType: "xml") else { return }
         if let parser = XMLParser(contentsOf: URL(fileURLWithPath: path)) {
+            
             parser.delegate = self
             parser.parse()
-            #warning("this is where I should copy THIS NOT WORKING")
             guard let note = self.xmlNote else { return }
             MyFileManager.shared.copyFile(note: note)
             MyFileManager.shared.createNewNote(with: note)
@@ -154,6 +156,7 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     
     private func setup() {
         
+        self.loadDataFromDirectory()
         self.loadDataFromDirectory()
         self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
         self.tableView.tableFooterView = UIView()
@@ -179,7 +182,6 @@ extension NotesViewController: XMLParserDelegate {
         if elementName == "note" {
             let newNote = Note(title: self.xmlTitle, details: self.xmlDetails, type: .xml, path: "Resources/Note.xml")
             self.xmlNote = newNote
-            self.notes.append(newNote)
         }
     }
     

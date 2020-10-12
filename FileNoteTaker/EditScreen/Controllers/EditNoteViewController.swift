@@ -22,6 +22,7 @@ class EditNoteViewController: UIViewController {
             self.textView.keyboardDismissMode = .interactive
         }
     }
+    
     @IBOutlet weak var textViewBottomConstraint: NSLayoutConstraint!
     
     // MARK: - Variables
@@ -84,6 +85,7 @@ class EditNoteViewController: UIViewController {
     private func setup() {
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard))
+        tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
         self.navigationController?.view.addGestureRecognizer(tap)
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)

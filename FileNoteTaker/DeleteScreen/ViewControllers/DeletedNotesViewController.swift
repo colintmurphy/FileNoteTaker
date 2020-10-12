@@ -12,10 +12,15 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
     // MARK: - IBOutlets
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var emptyListLabel: UILabel!
     
     // MARK: - Variables
     
-    private var notes: [Note] = []
+    private var notes: [Note] = [] {
+        didSet {
+            self.emptyListLabel.isHidden = !self.notes.isEmpty
+        }
+    }
     
     // MARK: - View Life Cycles
 
@@ -48,7 +53,6 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
         } else {
             self.showAlert(title: "Yay", message: "Files successfully deleted!")
         }
-        
         self.tableView.reloadData()
     }
     
