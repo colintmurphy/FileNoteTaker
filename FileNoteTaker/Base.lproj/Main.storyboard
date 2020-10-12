@@ -139,6 +139,7 @@
                     <connections>
                         <outlet property="textField" destination="1Sr-vb-kZM" id="I0p-pr-qeB"/>
                         <outlet property="textView" destination="atg-Eg-I3G" id="1N1-vC-zBd"/>
+                        <outlet property="textViewBottomConstraint" destination="zOF-R5-bh9" id="3Kx-Ps-tPE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ggn-fa-NZ3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

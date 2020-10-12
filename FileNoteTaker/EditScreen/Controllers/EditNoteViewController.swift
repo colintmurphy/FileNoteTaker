@@ -13,6 +13,7 @@ class EditNoteViewController: UIViewController {
     
     @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var textView: UITextView!
+    @IBOutlet weak var textViewBottomConstraint: NSLayoutConstraint!
     
     // MARK: - Variables
     
@@ -53,15 +54,23 @@ class EditNoteViewController: UIViewController {
     
     @objc private func dismissKeyboard() {
         
+        //self.textViewBottomConstraint.constant = 0
         self.textView.contentInset = UIEdgeInsets(top: self.textView.contentInset.top, left: 0, bottom: 0, right: 0)
         self.view.endEditing(true)
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
         
+        #warning("just connect bottom of the textview to top of keyboard")
+        
         if self.textView.isFirstResponder {
             if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                
                 self.textView.contentInset = UIEdgeInsets(top: self.textView.contentInset.top, left: 0, bottom: keyboardSize.height, right: 0)
+                
+                //self.textViewBottomConstraint.constant += keyboardSize.height
+                //let bottom = textView.contentSize.height
+                //self.textView.setContentOffset(CGPoint(x: 0, y: bottom), animated: true)
                 
                 // If textView is hidden by keyboard, scroll it so it's visible
                 var aRect: CGRect = self.view.frame
@@ -81,6 +90,7 @@ class EditNoteViewController: UIViewController {
         self.textField.text = note?.title
         self.textView.text = note?.details
         self.textView.keyboardDismissMode = .interactive
+        
         self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }

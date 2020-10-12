@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DeletedNotesViewController: UIViewController {
+class DeletedNotesViewController: UIViewController, FileReaderProtocol {
     
     // MARK: - IBOutlets
     
@@ -20,7 +20,9 @@ class DeletedNotesViewController: UIViewController {
     // MARK: - View Life Cycles
 
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+        self.setup()
     }
     
     // MARK: - IBActions
@@ -28,15 +30,26 @@ class DeletedNotesViewController: UIViewController {
     @IBAction func deleteFiles(_ sender: Any) {
         
         var presentError = false
-        for note in self.notes {
+        var removedIndexes: [Int] = []
+        for (index, note) in self.notes.enumerated() {
             if !MyFileManager.shared.deleteFile(note: note) {
                 presentError = true
+            } else {
+                removedIndexes.append(index)
             }
+        }
+        
+        for index in removedIndexes.reversed() {
+            self.notes.remove(at: index)
         }
         
         if presentError {
             self.showAlert(title: "Error", message: "We had trouble deleting one or more of your files.")
+        } else {
+            self.showAlert(title: "Yay", message: "Files successfully deleted!")
         }
+        
+        self.tableView.reloadData()
     }
     
     private func deleteNote(_ note: Note) -> Bool {
@@ -47,43 +60,16 @@ class DeletedNotesViewController: UIViewController {
     
     private func setup() {
         
-        if let urls = MyFileManager.shared.getDeleteSoonFiles() {
-            for url in urls {
-                print("url: ", url)
-                self.loadDataFromTextFile(with: url)
-            }
-        }
-        
         self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
         self.tableView.tableFooterView = UIView()
-        self.tableView.reloadData()
-    }
-    
-    private func loadDataFromTextFile(with path: URL) {
         
-        do {
-            let dataContent = try String(contentsOf: path, encoding: .utf8)
-            self.parseTextFileResults(of: dataContent, with: path.absoluteString)
-        } catch let error {
-            print(error)
-        }
-    }
-    
-    // MARK: Parse
-    private func parseTextFileResults(of text: String, with path: String) {
-        
-        let tempArr = text.components(separatedBy: "\n")
-        var title = ""
-        var details = ""
-        
-        if tempArr.count > 0 {
-            title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-            if tempArr.count > 1 {
-                details = tempArr[1...].joined(separator: "\n")
+        guard let urls = MyFileManager.shared.getDeleteSoonFiles() else { return }
+        for url in urls {
+            if let note = self.loadDataFromTextFile(with: url) {
+                self.notes.append(note)
             }
-            let newNote = Note(title: title, details: details, type: .txt, path: path)
-            self.notes.append(newNote)
         }
+        self.tableView.reloadData()
     }
 }
 

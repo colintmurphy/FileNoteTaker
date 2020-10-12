@@ -7,7 +7,7 @@
 
 import UIKit
 
-class NotesViewController: UIViewController {
+class NotesViewController: UIViewController, FileReaderProtocol {
     
     // MARK: - IBOutlets
     
@@ -45,8 +45,9 @@ class NotesViewController: UIViewController {
     
     @IBAction func createNewNote(_ sender: Any) {
 
-        if let newFile = MyFileManager.shared.createFile() {
-            self.parseTextFileResults(of: newFile.data, with: newFile.path)
+        if let newFile = MyFileManager.shared.createFile(),
+           let note = self.parseTextFileResults(of: newFile.data, with: newFile.path) {
+            self.notes.append(note)
             self.tableView.reloadData()
         }
     }
@@ -67,61 +68,23 @@ class NotesViewController: UIViewController {
             let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
             
             for url in fileURLs {
-                print("url: ", url)
-                self.loadDataFromTextFile(with: url)
-                if url.absoluteString.fileName().contains("Note.") {
-                    doInitialLoad = false
-                }
+                if let note = self.loadDataFromTextFile(with: url) { self.notes.append(note) }
+                if url.absoluteString.fileName().contains("Note.") { doInitialLoad = false }
             }
         } catch let error {
-            print(error.localizedDescription)
+            print(error)
         }
         
         if doInitialLoad {
-            if let txtBundlePath = Bundle.main.path(forResource: "Note", ofType: "txt") {
-                self.loadDataFromTextFile(with: txtBundlePath)
+            
+            if let txtBundlePath = Bundle.main.path(forResource: "Note", ofType: "txt"),
+               let note = self.loadDataFromTextFile(with: txtBundlePath) {
+                
+                self.notes.append(note)
             }
             self.loadDataFromPlist()
             self.loadDataFromJSONFile()
             self.loadDataFromXMLFile(withName: "Note")
-        }
-    }
-    
-    // MARK: Load from Txt
-    private func loadDataFromTextFile(with path: String) {
-        
-        do {
-            let dataContent = try String(contentsOfFile: path, encoding: .utf8)
-            self.parseTextFileResults(of: dataContent, with: path)
-        } catch let error {
-            print(error)
-        }
-    }
-    
-    private func loadDataFromTextFile(with url: URL) {
-        
-        do {
-            let dataContent = try String(contentsOf: url, encoding: .utf8)
-            self.parseTextFileResults(of: dataContent, with: url.absoluteString)
-        } catch let error {
-            print(error)
-        }
-    }
-    
-    // MARK: Parse
-    private func parseTextFileResults(of text: String, with path: String) {
-        
-        let tempArr = text.components(separatedBy: "\n")
-        var title = ""
-        var details = ""
-        
-        if tempArr.count > 0 {
-            title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-            if tempArr.count > 1 {
-                details = tempArr[1...].joined(separator: "\n")
-            }
-            let newNote = Note(title: title, details: details, type: .txt, path: path)
-            self.notes.append(newNote)
         }
     }
     
@@ -130,8 +93,8 @@ class NotesViewController: UIViewController {
     private func loadDataFromPlist() {
         
         guard let note: Note = self.getPlistFile(withName: "Note") else { return }
-        #warning("this is where I should copy THIS NOT WORKING")
         MyFileManager.shared.copyFile(note: note)
+        MyFileManager.shared.createNewNote(with: note)
         self.notes.append(note)
     }
     
@@ -149,12 +112,13 @@ class NotesViewController: UIViewController {
     }
     
     // MARK: - Handle .json File
-    
+
     private func loadDataFromJSONFile() {
         
         guard let note: Note = self.getJSONFile(withName: "Note") else { return }
         #warning("this is where I should copy THIS NOT WORKING")
         MyFileManager.shared.copyFile(note: note)
+        MyFileManager.shared.createNewNote(with: note)
         self.notes.append(note)
     }
     
@@ -182,6 +146,7 @@ class NotesViewController: UIViewController {
             #warning("this is where I should copy THIS NOT WORKING")
             guard let note = self.xmlNote else { return }
             MyFileManager.shared.copyFile(note: note)
+            MyFileManager.shared.createNewNote(with: note)
         }
     }
     

@@ -25,6 +25,7 @@
 		2146E3442533C66D00C7D8D5 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E3432533C66D00C7D8D5 /* String+Ext.swift */; };
 		2146E3482533C75E00C7D8D5 /* ViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */; };
 		2146E34C2533CE3E00C7D8D5 /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */; };
+		2146E3502533DD1F00C7D8D5 /* FileReaderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E34F2533DD1F00C7D8D5 /* FileReaderProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,7 @@
 		2146E3432533C66D00C7D8D5 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Ext.swift"; sourceTree = "<group>"; };
 		2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
+		2146E34F2533DD1F00C7D8D5 /* FileReaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,11 +83,11 @@
 			isa = PBXGroup;
 			children = (
 				2146E2A825326DF900C7D8D5 /* Support */,
-				2146E3422533C65C00C7D8D5 /* Utilities */,
 				2146E2C42532718E00C7D8D5 /* Resources */,
+				2146E3422533C65C00C7D8D5 /* Utilities */,
 				2146E2BB2532712600C7D8D5 /* NotesListScreen */,
-				2146E2BF2532715700C7D8D5 /* EditScreen */,
 				2146E2C12532716500C7D8D5 /* DeleteScreen */,
+				2146E2BF2532715700C7D8D5 /* EditScreen */,
 				2146E29925326DCB00C7D8D5 /* Main.storyboard */,
 			);
 			path = FileNoteTaker;
@@ -101,24 +103,6 @@
 				2146E29525326DCB00C7D8D5 /* SceneDelegate.swift */,
 			);
 			path = Support;
-			sourceTree = "<group>";
-		};
-		2146E2AB25326E4600C7D8D5 /* Files */ = {
-			isa = PBXGroup;
-			children = (
-				2146E2CA2532734B00C7D8D5 /* Note.plist */,
-				2146E2CD2532736A00C7D8D5 /* Note.txt */,
-				2146E2D12532737C00C7D8D5 /* Note.xml */,
-				2146E2D52532738A00C7D8D5 /* Note.json */,
-			);
-			path = Files;
-			sourceTree = "<group>";
-		};
-		2146E2AC25326E4C00C7D8D5 /* Delete */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Delete;
 			sourceTree = "<group>";
 		};
 		2146E2BB2532712600C7D8D5 /* NotesListScreen */ = {
@@ -191,8 +175,10 @@
 		2146E2C42532718E00C7D8D5 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				2146E2AB25326E4600C7D8D5 /* Files */,
-				2146E2AC25326E4C00C7D8D5 /* Delete */,
+				2146E2CA2532734B00C7D8D5 /* Note.plist */,
+				2146E2CD2532736A00C7D8D5 /* Note.txt */,
+				2146E2D12532737C00C7D8D5 /* Note.xml */,
+				2146E2D52532738A00C7D8D5 /* Note.json */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -211,6 +197,7 @@
 			children = (
 				2146E3432533C66D00C7D8D5 /* String+Ext.swift */,
 				2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */,
+				2146E34F2533DD1F00C7D8D5 /* FileReaderProtocol.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -290,6 +277,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2146E3502533DD1F00C7D8D5 /* FileReaderProtocol.swift in Sources */,
 				2146E2B3253270BA00C7D8D5 /* DeletedNotesViewController.swift in Sources */,
 				2146E29825326DCB00C7D8D5 /* NotesViewController.swift in Sources */,
 				2146E2DA253274C600C7D8D5 /* Note.swift in Sources */,
