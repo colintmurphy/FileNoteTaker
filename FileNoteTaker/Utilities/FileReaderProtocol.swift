@@ -39,7 +39,7 @@ extension FileReaderProtocol {
         var title = ""
         var details = ""
         
-        if tempArr.count > 0 {
+        if !tempArr.isEmpty {
             title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
             if tempArr.count > 1 {
                 details = tempArr[1...].joined(separator: "\n")

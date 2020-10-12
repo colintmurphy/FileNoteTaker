@@ -11,14 +11,16 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
     
     // MARK: - IBOutlets
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var emptyListLabel: UILabel!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var emptyListLabel: UILabel!
+    @IBOutlet private weak var deleteBarButtonItem: UIBarButtonItem!
     
     // MARK: - Variables
     
     private var notes: [Note] = [] {
         didSet {
             self.emptyListLabel.isHidden = !self.notes.isEmpty
+            self.deleteBarButtonItem.isEnabled = !self.notes.isEmpty
         }
     }
     
@@ -30,12 +32,17 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
         self.setup()
     }
     
-    // MARK: - IBActions
+    // MARK: - Delete Files
     
-    @IBAction func deleteFiles(_ sender: Any) {
+    private func deleteNote(_ note: Note) -> Bool {
+        return MyFileManager.shared.deleteFile(note: note)
+    }
+    
+    @IBAction private func deleteFiles(_ sender: Any) {
         
         var presentError = false
         var removedIndexes: [Int] = []
+        
         for (index, note) in self.notes.enumerated() {
             if !MyFileManager.shared.deleteFile(note: note) {
                 presentError = true
@@ -47,17 +54,13 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
         for index in removedIndexes.reversed() {
             self.notes.remove(at: index)
         }
+        self.tableView.reloadData()
         
         if presentError {
             self.showAlert(title: "Error", message: "We had trouble deleting one or more of your files.")
         } else {
             self.showAlert(title: "Yay", message: "Files successfully deleted!")
         }
-        self.tableView.reloadData()
-    }
-    
-    private func deleteNote(_ note: Note) -> Bool {
-        return MyFileManager.shared.deleteFile(note: note)
     }
     
     // MARK: - Setup
@@ -75,12 +78,6 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
         }
         self.tableView.reloadData()
     }
-}
-
-// MARK: - UITableViewDelegate
-
-extension DeletedNotesViewController: UITableViewDelegate {
-    
 }
 
 // MARK: - UITableViewDataSource
@@ -102,7 +99,7 @@ extension DeletedNotesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete", handler: { (action, view, closure) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
             
             if self.deleteNote(self.notes[indexPath.row]) {
                 self.notes.remove(at: indexPath.row)
@@ -110,7 +107,7 @@ extension DeletedNotesViewController: UITableViewDataSource {
             } else {
                 self.showAlert(title: "Error", message: "We couldn't delete your file.")
             }
-        })
+        }
         
         let swipe = UISwipeActionsConfiguration(actions: [deleteAction])
         swipe.performsFirstActionWithFullSwipe = false

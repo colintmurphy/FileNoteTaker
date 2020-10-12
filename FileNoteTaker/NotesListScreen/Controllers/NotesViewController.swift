@@ -11,20 +11,20 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     
     // MARK: - IBOutlets
     
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var emptyListLabel: UILabel!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var emptyListLabel: UILabel!
     
     // MARK: - Variables
     
+    private var xmlNote: Note?
+    private var xmlElement: String = ""
+    private var xmlTitle: String = ""
+    private var xmlDetails: String = ""
     private var notes: [Note] = [] {
         didSet {
             self.emptyListLabel.isHidden = !self.notes.isEmpty
         }
     }
-    private var xmlNote: Note?
-    private var xmlElement: String = ""
-    private var xmlTitle: String = ""
-    private var xmlDetails: String = ""
     
     // MARK: - View Life Cycles
     
@@ -48,7 +48,7 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     
     // MARK: - IBActions
     
-    @IBAction func createNewNote(_ sender: Any) {
+    @IBAction private func createNewNote(_ sender: Any) {
 
         if let newFile = MyFileManager.shared.createFile(),
            let note = self.parseTextFileResults(of: newFile.data, with: newFile.path) {
@@ -66,78 +66,51 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     
     private func loadDataFromDirectory() {
         
-        let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        guard let fileURLs = MyFileManager.shared.getDirectoryFiles() else { return }
         var doInitialLoad = true
         
-        do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-            
-            for url in fileURLs {
-                if let note = self.loadDataFromTextFile(with: url) { self.notes.append(note) }
-                if url.absoluteString.fileName().contains("Note.") { doInitialLoad = false }
+        for url in fileURLs {
+            if let note = self.loadDataFromTextFile(with: url) {
+                self.notes.append(note)
             }
-        } catch let error {
-            print(error)
+            if url.absoluteString.fileName().contains("Note.") {
+                // files from Resources folder marked with 'Note.' at beginning
+                // all other file names are marked with UUID's
+                doInitialLoad = false
+            }
         }
         
         if doInitialLoad {
-            
-            if let txtBundlePath = Bundle.main.path(forResource: "Note", ofType: "txt"),
-                let note = self.loadDataFromTextFile(with: txtBundlePath) {
-                MyFileManager.shared.copyFile(note: note)
-            }
-            self.loadDataFromPlist()
-            self.loadDataFromJSONFile()
-            self.loadDataFromXMLFile(withName: "Note")
+            self.loadFromResourceFolder()
         }
     }
     
-    // MARK: - Handle .plist File
+    private func loadFromResourceFolder() {
+        
+        if let txtBundlePath = MyFileManager.shared.getBundleTxtPath(),
+            let note = self.loadDataFromTextFile(with: txtBundlePath) {
+            MyFileManager.shared.copyFile(note: note)
+        }
+        self.loadDataFromPlist()
+        self.loadDataFromJSONFile()
+        self.loadDataFromXMLFile(withName: "Note")
+    }
+    
+    // MARK: - Handle non-.txt Files
     
     private func loadDataFromPlist() {
         
-        guard let note: Note = self.getPlistFile(withName: "Note") else { return }
+        guard let note: Note = MyFileManager.shared.getPlistFile(withName: "Note") else { return }
         MyFileManager.shared.copyFile(note: note)
         MyFileManager.shared.createNewNote(with: note)
     }
-    
-    private func getPlistFile<T: Decodable>(withName name: String) -> T? {
-        
-        guard let path = Bundle.main.path(forResource: name, ofType: "plist"),
-            let data = FileManager.default.contents(atPath: path) else { return nil }
-        do {
-            let obj = try PropertyListDecoder().decode(T.self, from: data)
-            return obj
-        } catch let error {
-            print(error)
-        }
-        return nil
-    }
-    
-    // MARK: - Handle .json File
 
     private func loadDataFromJSONFile() {
         
-        guard let note: Note = self.getJSONFile(withName: "Note") else { return }
+        guard let note: Note = MyFileManager.shared.getJSONFile(withName: "Note") else { return }
         MyFileManager.shared.copyFile(note: note)
         MyFileManager.shared.createNewNote(with: note)
     }
-    
-    private func getJSONFile<T: Decodable>(withName name: String) -> T? {
-        
-        guard let path = Bundle.main.path(forResource: name, ofType: "json") else { return nil }
-        do {
-            let data = try NSData(contentsOfFile: path, options: .mappedIfSafe) as Data
-            let model = try JSONDecoder().decode(T.self, from: data)
-            return model
-        } catch let error {
-            print(error)
-        }
-        return nil
-    }
-    
-    // MARK: - Handle .xml File
     
     private func loadDataFromXMLFile(withName name: String) {
         
@@ -231,7 +204,7 @@ extension NotesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete", handler: { (action, view, closure) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
             
             if self.deleteNote(at: self.notes[indexPath.row]) {
                 self.notes.remove(at: indexPath.row)
@@ -239,7 +212,7 @@ extension NotesViewController: UITableViewDataSource {
             } else {
                 self.showAlert(title: "Error", message: "We couldn't delete your file.")
             }
-        })
+        }
         
         let swipe = UISwipeActionsConfiguration(actions: [deleteAction])
         swipe.performsFirstActionWithFullSwipe = false

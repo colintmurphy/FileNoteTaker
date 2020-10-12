@@ -13,12 +13,89 @@ class MyFileManager {
     
     static let shared = MyFileManager()
     
-    private let fm = FileManager.default
+    private let manager = FileManager.default
     private let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     
     // MARK: - Init
     
     private init() { }
+    
+    // MARK: - Copy
+    
+    func copyFile(note: Note) {
+        
+        if note.type == .txt {
+            guard let oldPath = Bundle.main.path(forResource: "Note", ofType: note.type.rawValue) else { return }
+            let oldUrl = URL(fileURLWithPath: oldPath)
+            
+            do {
+                let newPath = paths[0].appendingPathComponent(note.path.fileName())
+                try manager.copyItem(at: oldUrl, to: newPath)
+            } catch {
+                print(error)
+            }
+        }
+    }
+    
+    // MARK: - Load from Directories
+    
+    func getDeleteSoonFiles() -> [URL]? {
+        
+        let deletePath = paths[0].appendingPathComponent("SoonToDeleteFolder")
+        
+        do {
+            let fileURLs = try manager.contentsOfDirectory(at: deletePath, includingPropertiesForKeys: nil)
+            return fileURLs
+        } catch let error {
+            print(error)
+            return nil
+        }
+    }
+    
+    func getDirectoryFiles() -> [URL]? {
+        
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        
+        do {
+            return try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+        } catch let error {
+            print(error)
+            return nil
+        }
+    }
+    
+    // MARK: - Load from Resources folder
+    
+    func getPlistFile<T: Decodable>(withName name: String) -> T? {
+        
+        guard let path = Bundle.main.path(forResource: name, ofType: "plist"),
+            let data = FileManager.default.contents(atPath: path) else { return nil }
+        do {
+            let obj = try PropertyListDecoder().decode(T.self, from: data)
+            return obj
+        } catch let error {
+            print(error)
+        }
+        return nil
+    }
+    
+    func getJSONFile<T: Decodable>(withName name: String) -> T? {
+        
+        guard let path = Bundle.main.path(forResource: name, ofType: "json") else { return nil }
+        do {
+            let data = try NSData(contentsOfFile: path, options: .mappedIfSafe) as Data
+            let model = try JSONDecoder().decode(T.self, from: data)
+            return model
+        } catch let error {
+            print(error)
+        }
+        return nil
+    }
+    
+    func getBundleTxtPath() -> String? {
+        return  Bundle.main.path(forResource: "Note", ofType: "txt")
+    }
     
     // MARK: - Create
     
@@ -65,36 +142,6 @@ class MyFileManager {
         }
     }
     
-    // MARK: - Load Files in DeleteSoon
-    
-    func getDeleteSoonFiles() -> [URL]? {
-        
-        let deletePath = paths[0].appendingPathComponent("SoonToDeleteFolder")
-        
-        do {
-            let fileURLs = try fm.contentsOfDirectory(at: deletePath, includingPropertiesForKeys: nil)
-            return fileURLs
-        } catch let error {
-            print(error)
-            return nil
-        }
-    }
-    
-    // MARK: - Delete
-    
-    func deleteFile(note: Note) -> Bool {
-        
-        let url = paths[0].appendingPathComponent("SoonToDeleteFolder/\(note.path.fileName())")
-        
-        do {
-            try fm.removeItem(at: url)
-            return true
-        } catch {
-            print(error)
-            return false
-        }
-    }
-    
     // MARK: - Move
     
     func moveFile(note: Note) -> Bool {
@@ -112,27 +159,25 @@ class MyFileManager {
         
         do {
             let newPath = dataPath.appendingPathComponent(note.path.fileName())
-            try fm.moveItem(at: url, to: newPath)
+            try manager.moveItem(at: url, to: newPath)
             return true
         } catch {
             return false
         }
     }
     
-    // MARK: - Copy
+    // MARK: - Delete
     
-    func copyFile(note: Note) {
+    func deleteFile(note: Note) -> Bool {
         
-        if note.type == .txt {
-            guard let oldPath = Bundle.main.path(forResource: "Note", ofType: note.type.rawValue) else { return }
-            let oldUrl = URL(fileURLWithPath: oldPath)
-            
-            do {
-                let newPath = paths[0].appendingPathComponent(note.path.fileName())
-                try fm.copyItem(at: oldUrl, to: newPath)
-            } catch {
-                print(error)
-            }
+        let url = paths[0].appendingPathComponent("SoonToDeleteFolder/\(note.path.fileName())")
+        
+        do {
+            try manager.removeItem(at: url)
+            return true
+        } catch {
+            print(error)
+            return false
         }
     }
 }

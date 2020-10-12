@@ -9,10 +9,10 @@ import Foundation
 
 enum FileType: String, Decodable {
     
-    case txt = "txt"
-    case xml = "xml"
-    case json = "json"
-    case plist = "plist"
+    case txt
+    case xml
+    case json
+    case plist
 }
 
 struct Note: Decodable {

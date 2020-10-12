@@ -26,5 +26,6 @@ class NoteTableViewCell: UITableViewCell {
         
         self.titleLabel.text = title
         self.detailLabel.text = details
+        if details.isEmpty { self.detailLabel.isHidden = true }
     }
 }

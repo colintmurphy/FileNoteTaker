@@ -50,6 +50,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteBarButtonItem" destination="bdh-Je-oYh" id="s8A-Pb-u5r"/>
                         <outlet property="emptyListLabel" destination="20C-Fu-z3I" id="Gw5-kJ-5Wg"/>
                         <outlet property="tableView" destination="lb2-it-nYu" id="TW2-g1-tLm"/>
                     </connections>

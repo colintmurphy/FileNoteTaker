@@ -11,19 +11,19 @@ class EditNoteViewController: UIViewController {
     
     // MARK: - IBOutlets
     
-    @IBOutlet weak var textField: UITextField! {
+    @IBOutlet private weak var textField: UITextField! {
         didSet {
             self.textField.text = note?.title
         }
     }
-    @IBOutlet weak var textView: UITextView! {
+    @IBOutlet private weak var textView: UITextView! {
         didSet {
             self.textView.text = note?.details
             self.textView.keyboardDismissMode = .interactive
         }
     }
     
-    @IBOutlet weak var textViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var textViewBottomConstraint: NSLayoutConstraint!
     
     // MARK: - Variables
     
@@ -51,7 +51,7 @@ class EditNoteViewController: UIViewController {
     
     // MARK: - IBActions
     
-    @IBAction func saveChanges(_ sender: Any) {
+    @IBAction private func saveChanges(_ sender: Any) {
         
         guard let note = self.note,
               let title = self.textField.text else { return }
@@ -64,9 +64,9 @@ class EditNoteViewController: UIViewController {
     
     @objc private func dismissKeyboard() {
         
-        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut, animations: {
+        UIView.animate(withDuration: 0.3, delay: 0, options: .curveEaseOut) {
             self.textViewBottomConstraint.constant = 8
-        })
+        }
         self.view.endEditing(true)
     }
     
@@ -74,9 +74,9 @@ class EditNoteViewController: UIViewController {
         
         if let userInfo = notification.userInfo,
            let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            UIView.animate(withDuration: 1.5, delay: 0, options: .curveEaseOut, animations: {
+            UIView.animate(withDuration: 1.5, delay: 0, options: .curveEaseOut) {
                 self.textViewBottomConstraint.constant = keyboardFrame.height + 8
-            })
+            }
         }
     }
     
