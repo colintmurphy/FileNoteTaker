@@ -78,7 +78,7 @@
                     <navigationItem key="navigationItem" title="My Notes" id="BIO-ur-7dP">
                         <barButtonItem key="leftBarButtonItem" title="Deleted" id="bLU-Dh-rzu">
                             <connections>
-                                <segue destination="6dU-e7-0qE" kind="show" id="I3S-74-Cgg"/>
+                                <segue destination="6dU-e7-0qE" kind="show" identifier="toDeleteList" id="I3S-74-Cgg"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" image="plus" catalog="system" id="t3x-vt-ljM">

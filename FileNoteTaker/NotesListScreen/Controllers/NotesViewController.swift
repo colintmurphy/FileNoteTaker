@@ -16,6 +16,7 @@ class NotesViewController: UIViewController {
     // MARK: - Variables
     
     private var notes: [Note] = []
+    private var xmlNote: Note?
     private var xmlElement: String = ""
     private var xmlTitle: String = ""
     private var xmlDetails: String = ""
@@ -43,67 +44,85 @@ class NotesViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func createNewNote(_ sender: Any) {
-        
-        // MARK: - CREATE
 
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let url = paths[0].appendingPathComponent("message3.txt")
-        let str = "Test Message 3"
-        
-        do {
-            try str.write(to: url, atomically: true, encoding: .utf8)
-            let data = try String(contentsOf: url, encoding: .utf8)
-            self.parseTextFileResults(of: data)
+        if let newFile = MyFileManager.shared.createFile() {
+            self.parseTextFileResults(of: newFile.data, with: newFile.path)
             self.tableView.reloadData()
-        } catch {
-            print(error.localizedDescription)
         }
     }
     
     private func deleteNote(at note: Note) -> Bool {
+        return MyFileManager.shared.moveFile(note: note)
+    }
+    
+    // MARK: - Handle .txt File
+    
+    private func loadDataFromDirectory() {
         
-        // MARK: - DELETE
+        let fileManager = FileManager.default
+        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        var doInitialLoad = true
         
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let url = paths[0].appendingPathComponent("message2.txt")
-        print(paths[0])
-        
-        /*
         do {
-            try FileManager.default.removeItem(at: url)
-            return true
-        } catch {
-            print(error)
-            return false
-        }*/
-        
-        // MARK: - MOVE
-        
-        let dataPath = paths[0].appendingPathComponent("SoonToDeleteFolder")
-        if !FileManager.default.fileExists(atPath: dataPath.absoluteString) {
-            do {
-                try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
-            } catch {
-                print(error.localizedDescription);
+            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
+            
+            for url in fileURLs {
+                print("url: ", url)
+                self.loadDataFromTextFile(with: url)
+                if url.absoluteString.fileName().contains("Note.") {
+                    doInitialLoad = false
+                }
             }
+        } catch let error {
+            print(error.localizedDescription)
         }
         
-        do {
-            try FileManager.default.moveItem(at: url, to: dataPath.appendingPathComponent("message2.txt"))
-            return true
-        } catch {
-            print(error)
-            return false
+        if doInitialLoad {
+            if let txtBundlePath = Bundle.main.path(forResource: "Note", ofType: "txt") {
+                self.loadDataFromTextFile(with: txtBundlePath)
+            }
+            self.loadDataFromPlist()
+            self.loadDataFromJSONFile()
+            self.loadDataFromXMLFile(withName: "Note")
         }
+    }
+    
+    // MARK: Load from Txt
+    private func loadDataFromTextFile(with path: String) {
         
-        /*
         do {
-            try FileManager.default.copyItem(at: <#T##URL#>, to: <#T##URL#>)
-            return true
-        } catch {
+            let dataContent = try String(contentsOfFile: path, encoding: .utf8)
+            self.parseTextFileResults(of: dataContent, with: path)
+        } catch let error {
             print(error)
-            return false
-        }*/
+        }
+    }
+    
+    private func loadDataFromTextFile(with url: URL) {
+        
+        do {
+            let dataContent = try String(contentsOf: url, encoding: .utf8)
+            self.parseTextFileResults(of: dataContent, with: url.absoluteString)
+        } catch let error {
+            print(error)
+        }
+    }
+    
+    // MARK: Parse
+    private func parseTextFileResults(of text: String, with path: String) {
+        
+        let tempArr = text.components(separatedBy: "\n")
+        var title = ""
+        var details = ""
+        
+        if tempArr.count > 0 {
+            title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            if tempArr.count > 1 {
+                details = tempArr[1...].joined(separator: "\n")
+            }
+            let newNote = Note(title: title, details: details, type: .txt, path: path)
+            self.notes.append(newNote)
+        }
     }
     
     // MARK: - Handle .plist File
@@ -111,6 +130,8 @@ class NotesViewController: UIViewController {
     private func loadDataFromPlist() {
         
         guard let note: Note = self.getPlistFile(withName: "Note") else { return }
+        #warning("this is where I should copy THIS NOT WORKING")
+        MyFileManager.shared.copyFile(note: note)
         self.notes.append(note)
     }
     
@@ -132,6 +153,8 @@ class NotesViewController: UIViewController {
     private func loadDataFromJSONFile() {
         
         guard let note: Note = self.getJSONFile(withName: "Note") else { return }
+        #warning("this is where I should copy THIS NOT WORKING")
+        MyFileManager.shared.copyFile(note: note)
         self.notes.append(note)
     }
     
@@ -148,56 +171,6 @@ class NotesViewController: UIViewController {
         return nil
     }
     
-    // MARK: - Handle .txt File
-    
-    private func loadDataFromTextFile() {
-        
-        guard let note: String = self.getTextFile(withName: "Note") else { return }
-        self.parseTextFileResults(of: note)
-    }
-    
-    private func getTextFile(withName name: String) -> String? {
-        
-        guard let path = Bundle.main.path(forResource: name, ofType: "txt") else { return nil }
-        do {
-            let dataContent = try String(contentsOfFile: path, encoding: .utf8)
-            return dataContent
-        } catch let error {
-            print(error)
-        }
-        return nil
-    }
-    
-    private func parseTextFileResults(of text: String) {
-        
-        let tempArr = text.components(separatedBy: "\n")
-        if tempArr.count > 1 {
-            let title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-            let details: String = tempArr[1...].joined(separator: "\n")
-            let newNote = Note(title: title, details: details, type: .txt, path: "Resources/Note.txt")
-            self.notes.append(newNote)
-        } else if tempArr.count == 1 {
-            let title = tempArr[0].trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-            let newNote = Note(title: title, details: "", type: .txt, path: "Resources/Note.txt")
-            self.notes.append(newNote)
-        }
-    }
-    
-    private func readDocsFromDirectory() {
-        
-        let fileManager = FileManager.default
-        let documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        do {
-            let fileURLs = try fileManager.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil)
-            for url in fileURLs {
-                let data = try String(contentsOf: url, encoding: .utf8)
-                self.parseTextFileResults(of: data)
-            }
-        } catch {
-            print("Error while enumerating files \(documentsURL.path): \(error.localizedDescription)")
-        }
-    }
-    
     // MARK: - Handle .xml File
     
     private func loadDataFromXMLFile(withName name: String) {
@@ -206,6 +179,9 @@ class NotesViewController: UIViewController {
         if let parser = XMLParser(contentsOf: URL(fileURLWithPath: path)) {
             parser.delegate = self
             parser.parse()
+            #warning("this is where I should copy THIS NOT WORKING")
+            guard let note = self.xmlNote else { return }
+            MyFileManager.shared.copyFile(note: note)
         }
     }
     
@@ -213,12 +189,7 @@ class NotesViewController: UIViewController {
     
     private func setup() {
         
-        self.loadDataFromPlist()
-        self.loadDataFromTextFile()
-        self.loadDataFromJSONFile()
-        self.loadDataFromXMLFile(withName: "Note")
-        readDocsFromDirectory()
-        
+        self.loadDataFromDirectory()
         self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
         self.tableView.tableFooterView = UIView()
         self.tableView.reloadData()
@@ -242,6 +213,7 @@ extension NotesViewController: XMLParserDelegate {
         
         if elementName == "note" {
             let newNote = Note(title: self.xmlTitle, details: self.xmlDetails, type: .xml, path: "Resources/Note.xml")
+            self.xmlNote = newNote
             self.notes.append(newNote)
         }
     }
@@ -298,7 +270,7 @@ extension NotesViewController: UITableViewDataSource {
                 self.notes.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             } else {
-                print("didn't move file")
+                self.showAlert(title: "Error", message: "We couldn't delete your file.")
             }
         })
         

@@ -22,6 +22,9 @@
 		2146E2D22532737C00C7D8D5 /* Note.xml in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2D12532737C00C7D8D5 /* Note.xml */; };
 		2146E2D62532738A00C7D8D5 /* Note.json in Resources */ = {isa = PBXBuildFile; fileRef = 2146E2D52532738A00C7D8D5 /* Note.json */; };
 		2146E2DA253274C600C7D8D5 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E2D9253274C600C7D8D5 /* Note.swift */; };
+		2146E3442533C66D00C7D8D5 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E3432533C66D00C7D8D5 /* String+Ext.swift */; };
+		2146E3482533C75E00C7D8D5 /* ViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */; };
+		2146E34C2533CE3E00C7D8D5 /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +45,9 @@
 		2146E2D12532737C00C7D8D5 /* Note.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Note.xml; sourceTree = "<group>"; };
 		2146E2D52532738A00C7D8D5 /* Note.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Note.json; sourceTree = "<group>"; };
 		2146E2D9253274C600C7D8D5 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
+		2146E3432533C66D00C7D8D5 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Ext.swift"; sourceTree = "<group>"; };
+		2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,6 +81,7 @@
 			isa = PBXGroup;
 			children = (
 				2146E2A825326DF900C7D8D5 /* Support */,
+				2146E3422533C65C00C7D8D5 /* Utilities */,
 				2146E2C42532718E00C7D8D5 /* Resources */,
 				2146E2BB2532712600C7D8D5 /* NotesListScreen */,
 				2146E2BF2532715700C7D8D5 /* EditScreen */,
@@ -194,8 +201,18 @@
 			isa = PBXGroup;
 			children = (
 				2146E2D9253274C600C7D8D5 /* Note.swift */,
+				2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		2146E3422533C65C00C7D8D5 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2146E3432533C66D00C7D8D5 /* String+Ext.swift */,
+				2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -278,8 +295,11 @@
 				2146E2DA253274C600C7D8D5 /* Note.swift in Sources */,
 				2146E29425326DCB00C7D8D5 /* AppDelegate.swift in Sources */,
 				2146E2B0253270B000C7D8D5 /* EditNoteViewController.swift in Sources */,
+				2146E34C2533CE3E00C7D8D5 /* MyFileManager.swift in Sources */,
 				2146E29625326DCB00C7D8D5 /* SceneDelegate.swift in Sources */,
+				2146E3442533C66D00C7D8D5 /* String+Ext.swift in Sources */,
 				2146E2B6253270CA00C7D8D5 /* NoteTableViewCell.swift in Sources */,
+				2146E3482533C75E00C7D8D5 /* ViewController+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

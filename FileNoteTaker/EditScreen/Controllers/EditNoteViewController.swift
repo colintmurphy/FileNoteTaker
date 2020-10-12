@@ -45,16 +45,32 @@ class EditNoteViewController: UIViewController {
         guard let note = self.note,
               let title = self.textField.text else { return }
         
-        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        let url = paths[0].appendingPathComponent("message2.txt")
         let strData = "\(title)\n\(self.textView.text ?? "")"
+        MyFileManager.shared.writeFile(with: strData, note: note)
+    }
+    
+    // MARK: - Keyboard handling
+    
+    @objc private func dismissKeyboard() {
         
-        do {
-            try strData.write(to: url, atomically: true, encoding: .utf8)
-            let data = try String(contentsOf: url, encoding: .utf8)
-            print(data.description)
-        } catch {
-            print(error.localizedDescription)
+        self.textView.contentInset = UIEdgeInsets(top: self.textView.contentInset.top, left: 0, bottom: 0, right: 0)
+        self.view.endEditing(true)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        
+        if self.textView.isFirstResponder {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                self.textView.contentInset = UIEdgeInsets(top: self.textView.contentInset.top, left: 0, bottom: keyboardSize.height, right: 0)
+                
+                // If textView is hidden by keyboard, scroll it so it's visible
+                var aRect: CGRect = self.view.frame
+                aRect.size.height -= keyboardSize.height
+                
+                if let textViewRect = self.textView.superview?.superview?.frame {
+                    self.textView.scrollRectToVisible(textViewRect, animated: true)
+                }
+            }
         }
     }
     
@@ -64,5 +80,8 @@ class EditNoteViewController: UIViewController {
         
         self.textField.text = note?.title
         self.textView.text = note?.details
+        self.textView.keyboardDismissMode = .interactive
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(self.dismissKeyboard)))
+        NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
     }
 }
