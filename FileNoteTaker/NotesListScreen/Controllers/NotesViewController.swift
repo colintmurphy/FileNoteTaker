@@ -65,24 +65,19 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     
     // MARK: - Handle .txt File
     
-    private func loadDataFromDirectory() {
+    private func loadData() {
         
         guard let fileURLs = MyFileManager.shared.getDirectoryFiles() else { return }
-        var doInitialLoad = true
         
-        for url in fileURLs {
-            if let note = self.loadDataFromTextFile(with: url) {
-                self.notes.append(note)
-            }
-            if url.absoluteString.fileName().contains("Note.") {
-                // files from Resources folder marked with 'Note.' at beginning
-                // all other file names are marked with UUID's
-                doInitialLoad = false
-            }
-        }
-        
-        if doInitialLoad {
+        if fileURLs.isEmpty {
             self.loadFromResourceFolder()
+            self.loadData()
+        } else {
+            for url in fileURLs {
+                if let note = self.loadDataFromTextFile(with: url) {
+                    self.notes.append(note)
+                }
+            }
         }
     }
     
@@ -130,8 +125,7 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     
     private func setup() {
         
-        self.loadDataFromDirectory()
-        self.loadDataFromDirectory()
+        self.loadData()
         self.tableView.register(UINib(nibName: NoteTableViewCell.reuseId, bundle: nil), forCellReuseIdentifier: NoteTableViewCell.reuseId)
         self.tableView.tableFooterView = UIView()
         self.tableView.reloadData()

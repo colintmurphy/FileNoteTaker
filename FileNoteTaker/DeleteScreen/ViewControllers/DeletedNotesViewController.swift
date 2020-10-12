@@ -32,6 +32,12 @@ class DeletedNotesViewController: UIViewController, FileReaderProtocol {
         self.setup()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
+        self.deleteBarButtonItem.isEnabled = !self.notes.isEmpty
+    }
+    
     // MARK: - Delete Files
     
     private func deleteNote(_ note: Note) -> Bool {
@@ -112,5 +118,14 @@ extension DeletedNotesViewController: UITableViewDataSource {
         let swipe = UISwipeActionsConfiguration(actions: [deleteAction])
         swipe.performsFirstActionWithFullSwipe = false
         return swipe
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension DeletedNotesViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
