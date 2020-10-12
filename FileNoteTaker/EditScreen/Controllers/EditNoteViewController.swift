@@ -19,7 +19,6 @@ class EditNoteViewController: UIViewController {
     @IBOutlet private weak var textView: UITextView! {
         didSet {
             self.textView.text = note?.details
-            self.textView.keyboardDismissMode = .interactive
         }
     }
     
@@ -28,6 +27,7 @@ class EditNoteViewController: UIViewController {
     // MARK: - Variables
     
     var note: Note?
+    weak var delegate: UpdateNoteDelegate?
     
     // MARK: - View Life Cycles
 
@@ -53,11 +53,15 @@ class EditNoteViewController: UIViewController {
     
     @IBAction private func saveChanges(_ sender: Any) {
         
-        guard let note = self.note,
+        guard var note = self.note,
               let title = self.textField.text else { return }
         
         let strData = "\(title)\n\(self.textView.text ?? "")"
         MyFileManager.shared.writeFile(with: strData, note: note)
+        
+        note.title = title
+        note.details = self.textView.text ?? ""
+        self.delegate?.update(note)
     }
     
     // MARK: - Keyboard handling
@@ -88,7 +92,7 @@ class EditNoteViewController: UIViewController {
         tap.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tap)
         self.navigationController?.view.addGestureRecognizer(tap)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.dismissKeyboard), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 }

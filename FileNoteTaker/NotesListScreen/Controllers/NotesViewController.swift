@@ -20,6 +20,7 @@ class NotesViewController: UIViewController, FileReaderProtocol {
     private var xmlElement: String = ""
     private var xmlTitle: String = ""
     private var xmlDetails: String = ""
+    private var selectedIndex: IndexPath?
     private var notes: [Note] = [] {
         didSet {
             self.emptyListLabel.isHidden = !self.notes.isEmpty
@@ -179,9 +180,24 @@ extension NotesViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         let story = UIStoryboard(name: "Main", bundle: nil)
         if let editVC = story.instantiateViewController(withIdentifier: "EditNoteViewController") as? EditNoteViewController {
+            
+            self.selectedIndex = indexPath
+            editVC.delegate = self
             editVC.note = self.notes[indexPath.row]
             self.navigationController?.pushViewController(editVC, animated: true)
         }
+    }
+}
+
+// MARK: - UpdateNoteDelegate
+
+extension NotesViewController: UpdateNoteDelegate {
+    
+    func update(_ note: Note) {
+        
+        guard let index = self.selectedIndex else { return }
+        self.notes[index.row] = note
+        self.tableView.reloadRows(at: [index], with: .automatic)
     }
 }
 

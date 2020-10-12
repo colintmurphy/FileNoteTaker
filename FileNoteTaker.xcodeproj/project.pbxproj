@@ -26,6 +26,7 @@
 		2146E3482533C75E00C7D8D5 /* ViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */; };
 		2146E34C2533CE3E00C7D8D5 /* MyFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */; };
 		2146E3502533DD1F00C7D8D5 /* FileReaderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2146E34F2533DD1F00C7D8D5 /* FileReaderProtocol.swift */; };
+		2169B61025349B4B00E1ECFA /* UpdateNoteDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2169B60F25349B4B00E1ECFA /* UpdateNoteDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +51,7 @@
 		2146E3472533C75E00C7D8D5 /* ViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+Ext.swift"; sourceTree = "<group>"; };
 		2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyFileManager.swift; sourceTree = "<group>"; };
 		2146E34F2533DD1F00C7D8D5 /* FileReaderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileReaderProtocol.swift; sourceTree = "<group>"; };
+		2169B60F25349B4B00E1ECFA /* UpdateNoteDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNoteDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -188,6 +190,7 @@
 			children = (
 				2146E2D9253274C600C7D8D5 /* Note.swift */,
 				2146E34B2533CE3E00C7D8D5 /* MyFileManager.swift */,
+				2169B60F25349B4B00E1ECFA /* UpdateNoteDelegate.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -309,6 +312,7 @@
 				2146E3442533C66D00C7D8D5 /* String+Ext.swift in Sources */,
 				2146E2B6253270CA00C7D8D5 /* NoteTableViewCell.swift in Sources */,
 				2146E3482533C75E00C7D8D5 /* ViewController+Ext.swift in Sources */,
+				2169B61025349B4B00E1ECFA /* UpdateNoteDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
